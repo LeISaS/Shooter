@@ -20,6 +20,24 @@ void AShooterCharacter::BeginPlay()
 
 	int MyInt{ 42 };
 	UE_LOG(LogTemp, Warning, TEXT("int myInt: %d"), MyInt);
+
+	float myFloat{ 3.14159f };	//f를 포함하지않으면 이중 리터럴 값이 축소변환을 이르킨다. 
+	UE_LOG(LogTemp, Warning, TEXT("float myFloat: %f"), myFloat);
+
+	double myDouble{ 0.000756 };
+	UE_LOG(LogTemp, Warning, TEXT("double myDouble: %lf"), myDouble);
+
+	char myChar{ 'J' };
+	UE_LOG(LogTemp, Warning, TEXT("char myChar: %c"), myChar);
+
+	wchar_t wideChar{ L'J' };
+	UE_LOG(LogTemp, Warning, TEXT("wchar_t wideChar: %lc"), wideChar);
+
+	bool myBool{ true };
+	UE_LOG(LogTemp, Warning, TEXT("bool myBool: %d"), myBool);
+
+	
+	UE_LOG(LogTemp, Warning, TEXT("int : %d, float : %f, bool: %d"), MyInt, myFloat, myBool);
 }
 
 // Called every frame
