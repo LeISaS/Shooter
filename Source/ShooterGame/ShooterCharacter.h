@@ -25,6 +25,10 @@ protected:
 	/**Called for side to side input*/
 	void MoveRight(float Value);
 
+	void TurnAtRate(float Rate);
+
+	void LookUpAtRate(float Rate);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -43,6 +47,13 @@ private:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = Camera,meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+	/**Base turn rate*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	float BaseTurnRate;
+	
+	/**Base lokk up/down rate*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	float BaseLookUpRate;
 
 
 public:
