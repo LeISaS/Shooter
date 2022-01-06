@@ -29,9 +29,41 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	
 
+
+
+
+}
+
+void AShooterCharacter::MoveForward(float Value)
+{
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		//find out which way is forward
+		const FRotator Rotation{ Controller->GetControlRotation() };
+		const FRotator YawRotation{ 0,Rotation.Yaw,0 };
+
+		//컨트롤러 방향을 가리키고있다.
+		const FVector Direction{ FRotationMatrix{YawRotation}.GetUnitAxis(EAxis::X) };	//회전행렬에서 X축을 얻고 우리는 회전을 사용한다.
+		AddMovementInput(Direction, Value);
+
+	}
+
+}
+
+void AShooterCharacter::MoveRight(float Value)
+{
+	if ((Controller != nullptr) && (Value != 0.0f))
+	{
+		//find out which way is forward
+		const FRotator Rotation{ Controller->GetControlRotation() };
+		const FRotator YawRotation{ 0,Rotation.Yaw,0 };
+
+		//컨트롤러 방향을 가리키고있다.
+		const FVector Direction{ FRotationMatrix{YawRotation}.GetUnitAxis(EAxis::Y) };	//회전행렬에서 X축을 얻고 우리는 회전을 사용한다.
+		AddMovementInput(Direction, Value);
+
+	}
 }
 
 // Called every frame
@@ -45,6 +77,16 @@ void AShooterCharacter::Tick(float DeltaTime)
 void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	//플레이어 입력 구성 요소가 유효하지 않은 경우 실행을 중지함
+	check(PlayerInputComponent);
+
+
+	//축매핑
+	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterCharacter::MoveForward);
+
+	PlayerInputComponent->BindAxis("MoveRight", this, &AShooterCharacter::MoveRight);
+
 
 }
 
