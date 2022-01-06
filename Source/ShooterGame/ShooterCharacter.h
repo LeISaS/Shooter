@@ -26,4 +26,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
+private:
+	
+	/**	 Caemra boom Positioning the caemra behind the character	*/
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = Camera,meta = (AllowPrivateAccess = "true"))
+	class USpringArmComponent* CameraBoom;
+
+public:
+	
+	/** Retruns CaermaBoom Subobject */
+	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+
 };
