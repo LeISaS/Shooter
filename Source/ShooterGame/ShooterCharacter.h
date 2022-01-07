@@ -29,6 +29,8 @@ protected:
 
 	void LookUpAtRate(float Rate);
 
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

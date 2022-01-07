@@ -4,6 +4,7 @@
 #include "ShooterCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter() :
@@ -24,7 +25,16 @@ AShooterCharacter::AShooterCharacter() :
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);	//Attach caemra to end of boom
 	FollowCamera->bUsePawnControlRotation = false; //Camera does not rotate relative to arm
 
+	//controller only affect the camera
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false; 
 
+	//Configure Character Movement
+	GetCharacterMovement()->bOrientRotationToMovement = true;			//캐릭터 입력 방향으로 바라보기
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);		//회전속도
+	GetCharacterMovement()->JumpZVelocity = 600.f;								//점프속도
+	GetCharacterMovement()->AirControl = 0.2f;											//공기 제어
 }
 
 // Called when the game starts or when spawned
@@ -76,6 +86,8 @@ void AShooterCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {
@@ -96,6 +108,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 
+
+
 	//축매핑
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShooterCharacter::MoveRight);
@@ -105,8 +119,5 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-
-
-
 }
 
