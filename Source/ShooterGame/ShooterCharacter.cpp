@@ -24,6 +24,7 @@ AShooterCharacter::AShooterCharacter() :
 	CameraBoom->SetupAttachment(RootComponent);	//플레이어 따라가게 붙이기
 	CameraBoom->TargetArmLength = 300.f;					//플레이어와 카메라와의 거리
 	CameraBoom->bUsePawnControlRotation = true;		//컨트롤러가 이동할 때마다 카메라 회전사용 - Rotate the arm basesed on the controller
+	CameraBoom->SocketOffset = FVector(0.f, 50.f, 50.f);
 
 	//Create a follow Camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -32,11 +33,11 @@ AShooterCharacter::AShooterCharacter() :
 
 	//controller only affect the camera
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false; 
 
 	//Configure Character Movement
-	GetCharacterMovement()->bOrientRotationToMovement = true;			//캐릭터 입력 방향으로 바라보기
+	GetCharacterMovement()->bOrientRotationToMovement = false;			//캐릭터 입력 방향으로 바라보기
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);		//회전속도
 	GetCharacterMovement()->JumpZVelocity = 600.f;								//점프속도
 	GetCharacterMovement()->AirControl = 0.2f;											//공기 제어
