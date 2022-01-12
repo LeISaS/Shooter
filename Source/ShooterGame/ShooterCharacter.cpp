@@ -110,20 +110,7 @@ void AShooterCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//Handle interpolation for Zoom when aiming
-	//CameraInterpZoom(DeltaTime);
-
-	//set Current Camera field of view
-	if (bAiming)
-	{
-		//Interpolate to zoomed FOV
-		CameraCurrentFOV = FMath::FInterpTo(CameraCurrentFOV, CameraZoomedFOV, DeltaTime, ZoomInterpSpeed);
-	}
-	else
-	{
-		//Interpolate to default FOV
-		CameraCurrentFOV = FMath::FInterpTo(CameraCurrentFOV, CameraDefaultFOV, DeltaTime, ZoomInterpSpeed);
-	}
-	GetFollowCamera()->SetFieldOfView(CameraCurrentFOV);
+	CameraInterpZoom(DeltaTime);
 
 }
 
