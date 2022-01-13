@@ -207,6 +207,10 @@ private:
 	/** Number of overlaped Aitems*/
 	int8 OverlappedItemCount;
 
+	/**The AItem we hit last frame*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = items, meta = (AllowPrivateAccess = "true"));
+	class AItem* TraceHitItemLastFrame;
+
 public:
 	
 	/** Retruns CameraBoom Subobject */
