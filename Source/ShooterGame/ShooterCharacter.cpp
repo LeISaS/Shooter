@@ -174,7 +174,8 @@ void AShooterCharacter::Tick(float DeltaTime)
 	CalculateCrosshairSpread(DeltaTime);
 
 	FHitResult ItemTraceResult;
-	TraceUnderCrosshairs(ItemTraceResult);
+	FVector HitLocation;
+	TraceUnderCrosshairs(ItemTraceResult,HitLocation);
 
 	if (ItemTraceResult.bBlockingHit)
 	{
@@ -273,54 +274,36 @@ void AShooterCharacter::FireWeapon()
 
 bool AShooterCharacter::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FVector& OutBeamLocation)
 {
-	/**뷰포트의 현재 크기 가져오기*/
-	FVector2D ViewportSize;
-	if (GEngine && GEngine->GameViewport)
+
+	//Chek for crosshair Trace hit
+	FHitResult CrosshairHitResult;
+	bool bCrosshairHit = TraceUnderCrosshairs(CrosshairHitResult, OutBeamLocation);
+
+	if (bCrosshairHit)
 	{
-		GEngine->GameViewport->GetViewportSize(ViewportSize);
+		// Tentative beam location - still need to trace form gun
+		OutBeamLocation = CrosshairHitResult.Location;
+	}
+	//No Crosshair trace hit
+	else
+	{
+		//OutBeamLocation is the end location for the line trace
+
 	}
 
-	/**십자선의 화면 공간 위치 가져오기*/
-	FVector2D CrosshairLocation(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);
-	FVector CrosshairWorldPosition;
-	FVector CrosshairWorldDirection;
+	//Perfomr trace from gun barrel
+	FHitResult WeaponTraceHit;
+	const FVector WeaponTraceStart{ MuzzleSocketLocation };
+	const FVector StartToEnd{ OutBeamLocation - MuzzleSocketLocation };
+	const FVector WeaponTraceEnd{ MuzzleSocketLocation + StartToEnd * 1.25f };
+	GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
 
-	//십자선의 세계 위치와 방향 얻기
-	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(UGameplayStatics::GetPlayerController(this, 0),
-		CrosshairLocation,
-		CrosshairWorldPosition,
-		CrosshairWorldDirection);
-
-	if (bScreenToWorld)
+	if (WeaponTraceHit.bBlockingHit)
 	{
-		FHitResult ScreenTraceHit;
-		const FVector Start{ CrosshairWorldPosition };
-		const FVector End{ CrosshairWorldPosition + CrosshairWorldDirection * 50'000.f };
-
-		//빔 끝점을 선 추적 끝점으로 설정
-		OutBeamLocation = End;
-
-		//십자선 세계 위치에서 바깥쪽으로 추적
-		GetWorld()->LineTraceSingleByChannel(ScreenTraceHit, Start, End, ECollisionChannel::ECC_Visibility);
-
-		//was there a trace hit?
-		if (ScreenTraceHit.bBlockingHit)
-		{
-			//추적 적중 위치
-			OutBeamLocation = ScreenTraceHit.Location;
-		}
-
-		FHitResult WeaponTraceHit;
-		const FVector WeaponTraceStart{ MuzzleSocketLocation };
-		const FVector WeaponTraceEnd{ OutBeamLocation };
-		GetWorld()->LineTraceSingleByChannel(WeaponTraceHit, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
-
-		if (WeaponTraceHit.bBlockingHit)
-		{
-			OutBeamLocation = WeaponTraceHit.Location;
-		}
+		OutBeamLocation = WeaponTraceHit.Location;
 		return true;
 	}
+	
 
 	return false;
 }
@@ -452,7 +435,7 @@ void AShooterCharacter::AutoFireReset()
 	}
 }
 
-bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult)
+bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult,FVector& OutHitLocation)
 {
 	//Get Viewport Size
 	FVector2D ViewportSize;
@@ -477,10 +460,13 @@ bool AShooterCharacter::TraceUnderCrosshairs(FHitResult& OutHitResult)
 		//Trace from Crosshair world location outward
 		const FVector Start{ CrosshairWorldPosition };
 		const FVector End{ Start + CrosshairWorldDirection * 50'000.f };
+		OutHitLocation = End;
+
 		GetWorld()->LineTraceSingleByChannel(OutHitResult, Start, End, ECollisionChannel::ECC_Visibility);
 
 		if (OutHitResult.bBlockingHit)
 		{
+			OutHitLocation = OutHitResult.Location;
 			return true;
 		}
 	}
