@@ -12,7 +12,7 @@
 #include "particles/ParticleSystemComponent.h"
 #include "Item.h"
 #include "Components/WidgetComponent.h"
-
+#include "Weapon.h"
 // Sets default values
 AShooterCharacter::AShooterCharacter() :
 	// Base rate for turning/looking up
@@ -87,6 +87,8 @@ void AShooterCharacter::BeginPlay()
 		CameraDefaultFOV = GetFollowCamera()->FieldOfView;
 		CameraCurrentFOV = CameraDefaultFOV;
 	}
+	//Spawn the Default Weapon and attach it to the mesh
+	SpawnDefaultWeapon();
 
 }
 
@@ -502,5 +504,26 @@ void AShooterCharacter::TraceForItems()
 	else if (TraceHitItemLastFrame)
 	{
 		TraceHitItemLastFrame->GetPickupWidget()->SetVisibility(false);
+	}
+}
+
+void AShooterCharacter::SpawnDefaultWeapon()
+{
+	//Check the TSubClassOf variable
+	if (DefaultWeaponClass)
+	{
+		//Spawn The Weapon
+		AWeapon* DefaultWeapon = GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
+		//Get the Hand Socket
+		const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
+
+		if (HandSocket)
+		{
+			//Attach the Weapon to the hand socket Right Hand Socket 
+			HandSocket->AttachActor(DefaultWeapon, GetMesh());
+		}
+		// Set EquippedWeapon to the newly spawned Weapon
+		EquippedWeapon = DefaultWeapon;
+
 	}
 }
