@@ -3,8 +3,8 @@
 
 #include "Item.h"
 #include "Components/BoxComponent.h"
-#include "Components/WidgetComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 #include "ShooterCharacter.h"
 // Sets default values
 AItem::AItem() :
