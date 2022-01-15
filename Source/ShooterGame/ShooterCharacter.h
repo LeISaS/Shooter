@@ -238,6 +238,14 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "ture"))
 	AItem* TraceHitItem;
 
+	/**Distance outward from the camera for the interp destination*/
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = Items, meta = (AllowPrivateAccess = "true"))
+	float CameraInterpDistance;
+
+	/**Distance upward from the camera for the interp Desination*/
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = Items, meta = (AllowPrivateAccess = "true"))
+	float CameraInterpElevation;
+
 public:
 	
 	/** Retruns CameraBoom Subobject */
@@ -255,4 +263,6 @@ public:
 
 	/** Adds/Subtracts to/ from OverlappedItemCount and updates b Should TracforItems*/
 	void IncrementOverlappedItemCount(int8 Amount);
+
+	FVector GetCameraInterpLocation();
 };
