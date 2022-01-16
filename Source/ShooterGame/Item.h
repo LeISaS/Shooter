@@ -59,6 +59,9 @@ protected:
 	/** Called when ItemInterpTimer is finished*/
 	void FinishInterping();
 
+	/**Handle Item inerpolation when in the EquipInterping state*/
+	void ItemInterp(float DeltaTime);
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -121,6 +124,10 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	float ZCurveTime;
+
+	/** X Y Item while interping*/
+	float ItemInterpX;
+	float ItemInterpY;
 
 public:
 
