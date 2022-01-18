@@ -96,6 +96,9 @@ protected:
 	/**InitializeAmmoMap */
 	void InitializeAmmoMap();
 
+	/**Check make sure our weapon was ammo*/
+	bool WeaponHasAmmo();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -269,6 +272,8 @@ private:
 	/**Starting amount of AR ammo*/
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Items, meta = (AllowPrivateAccess = "true"))
 	int32 StartingARAmmo;
+
+
 
 public:
 	
