@@ -55,7 +55,10 @@ AShooterCharacter::AShooterCharacter() :
 	OverlappedItemCount(0),
 	//Camera interp location variables
 	CameraInterpDistance(250.f),
-	CameraInterpElevation(65.f)
+	CameraInterpElevation(65.f),
+	//Starting AmmoAmount
+	Starting9mmAmmo(85),
+	StartingARAmmo(120)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -97,6 +100,7 @@ void AShooterCharacter::BeginPlay()
 	//Spawn the Default Weapon and equip it
 	EquipWeapon(SpawnDefaultWeapon());
 
+	InitializeAmmoMap();
 }
 
 void AShooterCharacter::MoveForward(float Value)
@@ -110,9 +114,7 @@ void AShooterCharacter::MoveForward(float Value)
 		//컨트롤러 방향을 가리키고있다.
 		const FVector Direction{ FRotationMatrix{YawRotation}.GetUnitAxis(EAxis::X) };	//회전행렬에서 X축을 얻고 우리는 회전을 사용한다.
 		AddMovementInput(Direction, Value);
-
 	}
-
 }
 
 void AShooterCharacter::MoveRight(float Value)
@@ -598,4 +600,10 @@ void AShooterCharacter::GetPickupItem(AItem* Item)
 	{
 		SwapWeapon(Weapon);
 	}
+}
+
+void AShooterCharacter::InitializeAmmoMap()
+{
+	AmmoMap.Add(EAmmoType::EAT_9mm, Starting9mmAmmo);
+	AmmoMap.Add(EAmmoType::EAT_AR, StartingARAmmo);
 }
