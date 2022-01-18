@@ -15,6 +15,16 @@ enum class EAmmoType : uint8
 	EAT_MAX			UMETA(DisplayName = "Default Max")
 };
 
+UENUM(BlueprintType)
+enum class ECombatState : uint8
+{
+	ECS_Unoccupied					UMETA(DisplayName = "Unoccupied"),
+	ECS_FireTimerInProgress		UMETA(DisplayName = "FireTimerInProgress"),
+	ECS_Reloading						UMETA(DisplayName = "Reloading	"),
+
+	ECS_Max								UMETA(DisplayName = "Default Max	")
+};
+
 UCLASS()
 class SHOOTERGAME_API AShooterCharacter : public ACharacter
 {
@@ -99,6 +109,11 @@ protected:
 	/**Check make sure our weapon was ammo*/
 	bool WeaponHasAmmo();
 
+	void PlayFireSound();
+
+	void SendBullet();
+
+	void PlayGunFireMontage();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -273,6 +288,9 @@ private:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = Items, meta = (AllowPrivateAccess = "true"))
 	int32 StartingARAmmo;
 
+	/**CombatState can only fire or reload if unoccupied*/
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	ECombatState CombatState;
 
 
 public:
