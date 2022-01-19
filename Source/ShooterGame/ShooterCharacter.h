@@ -4,14 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "AmmoType.h
+#include "AmmoType.h"
 #include "ShooterCharacter.generated.h"
+
 UENUM(BlueprintType)
 enum class ECombatState : uint8
 {
 	ECS_Unoccupied					UMETA(DisplayName = "Unoccupied"),
 	ECS_FireTimerInProgress		UMETA(DisplayName = "FireTimerInProgress"),
-	ECS_Reloading						UMETA(DisplayName = "Reloading	"),
+	ECS_Reloading						UMETA(DisplayName = "Reloading"),
 
 	ECS_Max								UMETA(DisplayName = "Default Max	")
 };
@@ -110,6 +111,8 @@ protected:
 	/**Handle Reloading of the weapon*/
 	void ReloadWeapon();
 
+	/**Check ammo type*/
+	bool CarringAmmo();
 
 public:	
 	// Called every frame

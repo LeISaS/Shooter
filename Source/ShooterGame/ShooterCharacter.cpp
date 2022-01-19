@@ -666,16 +666,31 @@ void AShooterCharacter::ReloadButtonPressed()
 void AShooterCharacter::ReloadWeapon()
 {
 	if (CombatState != ECombatState::ECS_Unoccupied) return;
+	if (EquippedWeapon == nullptr) return;
 
-	if (true)
+	if (CarringAmmo())
 	{
-		FName MontageSection(TEXT("Reload SMG"));
+		CombatState = ECombatState::ECS_Reloading;
+
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 		if (ReloadMontage&& AnimInstance)
 		{
 			AnimInstance->Montage_Play(ReloadMontage);
-			AnimInstance->Montage_JumpToSection(MontageSection);
+			AnimInstance->Montage_JumpToSection(EquippedWeapon->GetReloadMontageSection());
 		}
 	}
+}
 
+bool AShooterCharacter::CarringAmmo()
+{
+	if (EquippedWeapon == nullptr) return false;
+	
+	auto AmmoType = EquippedWeapon->GetAmmoType();
+
+	if (AmmoMap.Contains(AmmoType))
+	{
+		return AmmoMap[AmmoType] > 0;
+	}
+
+	return false;
 }
