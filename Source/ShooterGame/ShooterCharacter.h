@@ -114,6 +114,12 @@ protected:
 	/**Check ammo type*/
 	bool CarringAmmo();
 
+	UFUNCTION(BlueprintCallable)
+	void GrabClip();
+
+	UFUNCTION(BlueprintCallable)
+	void ReleaseClip();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -299,7 +305,13 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
 
+	/**Transform of the clip when we first grab the clip during reloading*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	FTransform ClipTransform;
 
+	/** Scene Component Attach to the Character's hand during reloading*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* HandSceneComponent;
 public:
 	
 	/** Retruns CameraBoom Subobject */
