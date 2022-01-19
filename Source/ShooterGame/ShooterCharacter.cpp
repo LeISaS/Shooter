@@ -212,6 +212,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Select", IE_Pressed, this, &AShooterCharacter::SelectButtonPressed);
 	PlayerInputComponent->BindAction("Select", IE_Released, this, &AShooterCharacter::SelectButtonReleased);
 
+	PlayerInputComponent->BindAction("ReloadButton", IE_Pressed, this, &AShooterCharacter::ReloadButtonPressed);
+
 	//Ãà¸ÅÇÎ
 	PlayerInputComponent->BindAxis("MoveForward", this, &AShooterCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AShooterCharacter::MoveRight);
@@ -221,6 +223,12 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAxis("Turn", this, &AShooterCharacter::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &AShooterCharacter::LookUp);
+}
+
+void AShooterCharacter::FinishReloading()
+{
+	//update Ammo Map
+	CombatState = ECombatState::ECS_Unoccupied;
 }
 
 float AShooterCharacter::GetCrosshairSpreadMultiplier() const
@@ -422,6 +430,7 @@ void AShooterCharacter::AutoFireReset()
 	else
 	{
 		//RealodWeapon
+		ReloadWeapon();
 	}
 }
 
@@ -647,4 +656,26 @@ void AShooterCharacter::PlayGunFireMontage()
 		AnimInstance->Montage_Play(HipFireMontage);
 		AnimInstance->Montage_JumpToSection(FName("StartFire"));
 	}
+}
+
+void AShooterCharacter::ReloadButtonPressed()
+{
+	ReloadWeapon();
+}
+
+void AShooterCharacter::ReloadWeapon()
+{
+	if (CombatState != ECombatState::ECS_Unoccupied) return;
+
+	if (true)
+	{
+		FName MontageSection(TEXT("Reload SMG"));
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (ReloadMontage&& AnimInstance)
+		{
+			AnimInstance->Montage_Play(ReloadMontage);
+			AnimInstance->Montage_JumpToSection(MontageSection);
+		}
+	}
+
 }
