@@ -34,6 +34,7 @@ void UShooterAnimInstance::UpdateAnimationProperties(float DeltaTime)
 	
 	if (ShooterCharacter)
 	{
+		bCrouching = ShooterCharacter->GetCrouching();
 		bReloading = ShooterCharacter->GetCombatState() == ECombatState::ECS_Reloading;
 
 		// Get the speed of the Character form velocity
@@ -119,7 +120,7 @@ void UShooterAnimInstance::TurnInPlace()
 		// 1.0 if turning, 0.0 if not
 		const float Turning{ GetCurveValue(TEXT("Turning")) };
 
-		if (GEngine) GEngine->AddOnScreenDebugMessage(3, -1, FColor::Green, FString::Printf(TEXT("Turning: %f"), Turning));
+		//if (GEngine) GEngine->AddOnScreenDebugMessage(3, -1, FColor::Green, FString::Printf(TEXT("Turning: %f"), Turning));
 
 		UE_LOG(LogTemp, Warning, TEXT("Turning: %f"), Turning);
 
@@ -132,7 +133,7 @@ void UShooterAnimInstance::TurnInPlace()
 			// RootYawOffset > 0, -> Turning Left. RootYawOffset < 0, -> Turning Right.
 			RootYawOffset > 0 ? RootYawOffset -= DeltaRotation : RootYawOffset += DeltaRotation;
 
-			if (GEngine) GEngine->AddOnScreenDebugMessage(2, -1, FColor::Green, FString::Printf(TEXT("DeltaRotation: %f"), DeltaRotation));
+			//if (GEngine) GEngine->AddOnScreenDebugMessage(2, -1, FColor::Green, FString::Printf(TEXT("DeltaRotation: %f"), DeltaRotation));
 
 
 			const float ABSRootYawOffset{ FMath::Abs(RootYawOffset) };
@@ -143,7 +144,7 @@ void UShooterAnimInstance::TurnInPlace()
 			}
 		}
 
-		if (GEngine) GEngine->AddOnScreenDebugMessage(1, -1, FColor::Cyan, FString::Printf(TEXT("RootYawOffset: %f"), RootYawOffset));
+		//if (GEngine) GEngine->AddOnScreenDebugMessage(1, -1, FColor::Cyan, FString::Printf(TEXT("RootYawOffset: %f"), RootYawOffset));
 	}
 }
 
@@ -159,8 +160,4 @@ void UShooterAnimInstance::Lean(float DeltaTime)
 	const float Target{ Delta.Yaw / DeltaTime };
 	const float Interp{ FMath::FInterpTo(YawDelta,Target,DeltaTime,6.f) };
 	YawDelta = FMath::Clamp(Interp, -90.f, 90.f);
-
-	if (GEngine) GEngine->AddOnScreenDebugMessage(4, -1, FColor::Cyan, FString::Printf(TEXT("YawDelta = %f"), YawDelta));
-
-	if (GEngine) GEngine->AddOnScreenDebugMessage(5, -1, FColor::Cyan, FString::Printf(TEXT("Delta = %f"), Delta.Yaw));
 }
