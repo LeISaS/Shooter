@@ -54,7 +54,7 @@ protected:
 	void SetActiveStarts();
 
 	/**Set properties of the Item's component based on State*/
-	void SetItemProperties(EItemState State);
+	virtual void SetItemProperties(EItemState State);
 
 	/** Called when ItemInterpTimer is finished*/
 	void FinishInterping();
@@ -153,6 +153,7 @@ public:
 
 	FORCEINLINE USoundCue* GetPickupSound() const { return PickupSound; }
 	FORCEINLINE USoundCue* GetEquipSound() const { return EquipSound; }
+	FORCEINLINE int32 GetItemCount() const { return ItemCount; }
 
 	/**Called from the AShooterCharacter class */
 	void StartItemCurve(AShooterCharacter* Char);
