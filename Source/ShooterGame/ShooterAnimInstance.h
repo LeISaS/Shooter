@@ -108,4 +108,12 @@ private:
 	/** True when Crouching */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Crouching, meta = (AllowPrivateAccess = "true"))
 	bool bCrouching;
+
+	/** Change the recoil weight based */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	float RecoilWeight;
+
+	/**True when turning place */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	bool bTurningInPlace;
 };
