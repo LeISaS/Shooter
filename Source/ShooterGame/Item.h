@@ -30,6 +30,15 @@ enum class EItemState : uint8
 	EIS_MAX				UMETA(DisplayName = "DefaultMax")
 };
 
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+	EIT_Ammo UMETA(DisplayName = "Ammo"),
+	EIT_Weapon UMETA(DisplayName = "Weapon"),
+
+	EIT_MAX UMETA(DisplayName  = "Default Max")
+};
+
 UCLASS()
 class SHOOTERGAME_API AItem : public AActor
 {
@@ -61,6 +70,8 @@ protected:
 
 	/**Handle Item inerpolation when in the EquipInterping state*/
 	void ItemInterp(float DeltaTime);
+
+	FVector GetInterpLocation();
 
 public:
 	// Called every frame
@@ -141,6 +152,13 @@ private:
 	class USoundCue* PickupSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	USoundCue* EquipSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	EItemType ItemType;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	int32 InterpLocIndex;
+
 public:
 
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; }

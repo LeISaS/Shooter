@@ -22,7 +22,9 @@ AItem::AItem() :
 	bInterping(false),
 	ItemInterpX(0.f),
 	ItemInterpY(0.f),
-	InterpInitialYawOffset(0.f)
+	InterpInitialYawOffset(0.f),
+	ItemType(EItemType::EIT_MAX),
+	InterpLocIndex(0)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -218,6 +220,7 @@ void AItem::FinishInterping()
 	bInterping = false;
 	if (Character)
 	{
+		Character->IncrementInterpLocItemCount(InterpLocIndex, -1);
 		Character->GetPickupItem(this);
 	}
 	//Set Scale back to normal
@@ -235,7 +238,7 @@ void AItem::ItemInterp(float DeltaTime)
 		const float CurveValue = ItemZCurve->GetFloatValue(ElapsedTime);
 
 		FVector ItemLocation = ItemInterpStartLocation;
-		const FVector CameraInterpLocation{ Character->GetCameraInterpLocation() };
+		const FVector CameraInterpLocation{ GetInterpLocation() };
 
 		const FVector ItemToCamera{ FVector(0.f,0.f,(CameraInterpLocation - ItemLocation).Z) };
 		const float DeltaZ = ItemToCamera.Size();
@@ -267,29 +270,47 @@ void AItem::ItemInterp(float DeltaTime)
 
 }
 
+FVector AItem::GetInterpLocation()
+{
+	if (Character == nullptr) return FVector(0.f);
+
+	switch (ItemType)
+	{
+	case EItemType::EIT_Ammo:
+		return Character->GetInterpLocation(InterpLocIndex).SceneComponent->GetComponentLocation();
+		break;
+	case EItemType::EIT_Weapon:
+		return Character->GetInterpLocation(0).SceneComponent->GetComponentLocation();
+
+		break;
+	}
+	return FVector();
+}
+
 void AItem::StartItemCurve(AShooterCharacter* Char)
 {
-	//Store a handle to the Character
 	Character = Char;
+
+	InterpLocIndex = Character->GetInterpLocationIndex();
+
+	Character->IncrementInterpLocItemCount(InterpLocIndex, 1);
+
+	ItemInterpStartLocation = GetActorLocation();
+
+	bInterping = true;
+
+	SetItemState(EItemState::EIS_EquipInterping);
+
+	GetWorldTimerManager().SetTimer(ItemInterpTimer, this, &AItem::FinishInterping, ZCurveTime);
+
+	const float CameraRotationYaw{ Character->GetFollowCamera()->GetComponentRotation().Yaw };
+	const float ItemRotationYaw{ GetActorRotation().Yaw };
+
+	InterpInitialYawOffset = ItemRotationYaw - CameraRotationYaw;
 
 	if (PickupSound)
 	{
 		UGameplayStatics::PlaySound2D(this, PickupSound);
 	}
-
-	//Store initial location of the item
-	ItemInterpStartLocation = GetActorLocation();
-	bInterping = true;
-	SetItemState(EItemState::EIS_EquipInterping);
-
-	GetWorldTimerManager().SetTimer(ItemInterpTimer, this, &AItem::FinishInterping, ZCurveTime);
-
-	//Get Initial Yaw of Camera & Item
-	const float CameraRotationYaw{ Character->GetFollowCamera()->GetComponentRotation().Yaw };
-	const float ItemRotationYaw{ GetActorRotation().Yaw };
-
-	//Initial Yaw offset between Camera and Item
-	InterpInitialYawOffset = ItemRotationYaw - CameraRotationYaw;
-
 }
 

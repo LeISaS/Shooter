@@ -100,6 +100,30 @@ AShooterCharacter::AShooterCharacter() :
 
 	//Create Hand Scene Component
 	HandSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("HandSceneComponent"));
+
+	//Create Interpolation Component
+	WeaponInterpComp = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponInterpComp"));
+	WeaponInterpComp->SetupAttachment(GetFollowCamera());
+
+	InterpCom1 = CreateDefaultSubobject<USceneComponent>(TEXT("InterpCom1"));
+	InterpCom1->SetupAttachment(GetFollowCamera());
+
+	InterpCom2 = CreateDefaultSubobject<USceneComponent>(TEXT("InterpCom2"));
+	InterpCom2->SetupAttachment(GetFollowCamera());
+
+	InterpCom3 = CreateDefaultSubobject<USceneComponent>(TEXT("InterpCom3"));
+	InterpCom3->SetupAttachment(GetFollowCamera());
+
+	InterpCom4 = CreateDefaultSubobject<USceneComponent>(TEXT("InterpCom4"));
+	InterpCom4->SetupAttachment(GetFollowCamera());
+
+	InterpCom5 = CreateDefaultSubobject<USceneComponent>(TEXT("InterpCom5"));
+	InterpCom5->SetupAttachment(GetFollowCamera());
+
+	InterpCom6 = CreateDefaultSubobject<USceneComponent>(TEXT("InterpCom6"));
+	InterpCom6->SetupAttachment(GetFollowCamera());
+
+
 }
 
 // Called when the game starts or when spawned
@@ -117,6 +141,8 @@ void AShooterCharacter::BeginPlay()
 
 	InitializeAmmoMap();
 	GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
+
+	InitializeInterpLocations();
 }
 
 void AShooterCharacter::MoveForward(float Value)
@@ -245,6 +271,8 @@ void AShooterCharacter::PickupAmmo(AAmmo* Ammo)
 	}
 	Ammo->Destroy();
 }
+
+
 
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
@@ -692,15 +720,15 @@ void AShooterCharacter::SwapWeapon(AWeapon* WeaponToSwap)
 	TraceHitItemLastFrame = nullptr;
 }
 
-FVector AShooterCharacter::GetCameraInterpLocation()
-{
-	const FVector CameraWorldLocation{ FollowCamera->GetComponentLocation() };
-	const FVector CameraForward{ FollowCamera->GetForwardVector() };
-	//Desired = CameraWorldLocation + Forward * A+ Up * B
-
-	return CameraWorldLocation + CameraForward * CameraInterpDistance + FVector(0.f, 0.f, CameraInterpElevation);
-
-}
+//FVector AShooterCharacter::GetCameraInterpLocation()
+//{
+//	const FVector CameraWorldLocation{ FollowCamera->GetComponentLocation() };
+//	const FVector CameraForward{ FollowCamera->GetForwardVector() };
+//	//Desired = CameraWorldLocation + Forward * A+ Up * B
+//
+//	return CameraWorldLocation + CameraForward * CameraInterpDistance + FVector(0.f, 0.f, CameraInterpElevation);
+//
+//}
 
 void AShooterCharacter::GetPickupItem(AItem* Item)
 {
@@ -720,6 +748,8 @@ void AShooterCharacter::GetPickupItem(AItem* Item)
 		PickupAmmo(Ammo);
 	}
 }
+
+
 
 void AShooterCharacter::InitializeAmmoMap()
 {
@@ -882,5 +912,63 @@ void AShooterCharacter::Jump()
 	else
 	{
 		ACharacter::Jump();
+	}
+}
+
+FInterpLocation AShooterCharacter::GetInterpLocation(int32 Index)
+{
+	if (Index < InterpLocations.Num())
+	{
+		return InterpLocations[Index];
+	}
+	return FInterpLocation();
+}
+
+void AShooterCharacter::InitializeInterpLocations()
+{
+	FInterpLocation WeaponLocation{ WeaponInterpComp,0 };
+	InterpLocations.Add(WeaponLocation);
+
+	FInterpLocation InterpLoc1{ InterpCom1,0 };
+	InterpLocations.Add(InterpLoc1);
+
+	FInterpLocation InterpLoc2{ InterpCom2,0 };
+	InterpLocations.Add(InterpLoc2);
+
+	FInterpLocation InterpLoc3{ InterpCom3,0 };
+	InterpLocations.Add(InterpLoc3);
+
+	FInterpLocation InterpLoc4{ InterpCom4,0 };
+	InterpLocations.Add(InterpLoc4);
+
+	FInterpLocation InterpLoc5{ InterpCom5,0 };
+	InterpLocations.Add(InterpLoc5);
+
+	FInterpLocation InterpLoc6{ InterpCom6,0 };
+	InterpLocations.Add(InterpLoc6);
+}
+
+int32 AShooterCharacter::GetInterpLocationIndex()
+{
+	int32 LowestIndex = 1;
+	int32 LowestCount = INT_MAX;
+	for (int32 i = 1; i < InterpLocations.Num(); i++)
+	{
+		if (InterpLocations[i].ItemCount < LowestCount)
+		{
+			LowestIndex = i;
+			LowestCount = InterpLocations[i].ItemCount;
+		}
+	}
+	return LowestIndex;
+}
+
+void AShooterCharacter::IncrementInterpLocItemCount(int32 Index, int32 Amount)
+{
+	if (Amount < -1 || Amount >1) return;
+
+	if (InterpLocations.Num() >= Index)
+	{
+		InterpLocations[Index].ItemCount += Amount;
 	}
 }
