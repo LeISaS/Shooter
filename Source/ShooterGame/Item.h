@@ -73,10 +73,15 @@ protected:
 
 	FVector GetInterpLocation();
 
+	void PlayPickupSound();
+
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//Called in AShooterCharacter::GetPickupItem
+	void PlayEquipSound();
 private:
 	/**Skeletal Mesh for the item*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
