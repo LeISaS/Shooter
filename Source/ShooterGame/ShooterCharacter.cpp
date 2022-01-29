@@ -143,6 +143,8 @@ void AShooterCharacter::BeginPlay()
 	}
 	//Spawn the Default Weapon and equip it
 	EquipWeapon(SpawnDefaultWeapon());
+	EquippedWeapon->DisableCustomDepth();
+	EquippedWeapon->DisableGlowMaterial();
 
 	InitializeAmmoMap();
 	GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
