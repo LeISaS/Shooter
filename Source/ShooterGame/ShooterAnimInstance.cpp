@@ -124,7 +124,7 @@ void UShooterAnimInstance::TurnInPlace()
 
 		//if (GEngine) GEngine->AddOnScreenDebugMessage(3, -1, FColor::Green, FString::Printf(TEXT("Turning: %f"), Turning));
 
-		UE_LOG(LogTemp, Warning, TEXT("Turning: %f"), Turning);
+		//UE_LOG(LogTemp, Warning, TEXT("Turning: %f"), Turning);
 
 		if (Turning > 0)
 		{
