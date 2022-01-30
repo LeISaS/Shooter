@@ -13,6 +13,7 @@ enum class ECombatState : uint8
 	ECS_Unoccupied					UMETA(DisplayName = "Unoccupied"),
 	ECS_FireTimerInProgress		UMETA(DisplayName = "FireTimerInProgress"),
 	ECS_Reloading						UMETA(DisplayName = "Reloading"),
+	ECS_Equipping						UMETA(DisplayName = "Equipping"),
 
 	ECS_Max								UMETA(DisplayName = "Default Max	")
 };
@@ -157,6 +158,9 @@ protected:
 	void FiveKeyPressed();
 
 	void ExchangeInventoryItems(int32 CurrentitemIndex, int32 NewItemIndex);
+
+	void FinishEquipping();
+
 
 public:	
 	// Called every frame
@@ -427,6 +431,9 @@ private:
 	//Delegate for sending slot information to inventorybar when equipping
 	UPROPERTY(BlueprintAssignable,Category = Delegates, meta = (AllowPrivateAccess = "true"))
 	FEquipItemDeletage EquipItemDelegate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	UAnimMontage* EquipMontage;
 
 
 public:
