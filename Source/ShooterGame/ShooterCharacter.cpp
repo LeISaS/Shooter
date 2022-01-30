@@ -737,16 +737,13 @@ void AShooterCharacter::DropWeapon()
 
 void AShooterCharacter::SelectButtonPressed()
 {
+	if (CombatState != ECombatState::ECS_Unoccupied) return;
+
 	if (TraceHitItem)
 	{
 		TraceHitItem->StartItemCurve(this);
 
 		TraceHitItem = nullptr;
-
-		//if (TraceHitItem->GetPickupSound())
-		//{
-		//	UGameplayStatics::PlaySound2D(this, TraceHitItem->GetPickupSound());
-		//}
 	}
 }
 
@@ -1095,8 +1092,7 @@ void AShooterCharacter::FiveKeyPressed()
 
 void AShooterCharacter::ExchangeInventoryItems(int32 CurrentitemIndex, int32 NewItemIndex)
 {
-	if (!Inventory.IsValidIndex(NewItemIndex)) return;
-	if ((CurrentitemIndex == NewItemIndex) && (NewItemIndex >= Inventory.Num())) return;
+	if ((CurrentitemIndex == NewItemIndex) || (NewItemIndex >= Inventory.Num()) || CombatState != ECombatState::ECS_Unoccupied) return;
 
 	auto OldEquippedWeapon = EquippedWeapon;
 	auto NewWeapon = Cast<AWeapon>(Inventory[NewItemIndex]);
