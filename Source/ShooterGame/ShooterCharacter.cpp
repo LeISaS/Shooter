@@ -646,6 +646,12 @@ void AShooterCharacter::TraceForItems()
 		if (ItemTraceResult.bBlockingHit)
 		{
 			TraceHitItem = Cast<AItem>(ItemTraceResult.Actor);
+
+			if (TraceHitItem && TraceHitItem->GetItemState() == EItemState::EIS_EquipInterping)
+			{
+				TraceHitItem = nullptr;
+			}
+
 			if (TraceHitItem && TraceHitItem->GetPickupWidget())
 			{
 				//Show Item's Pickup Widget
@@ -735,10 +741,12 @@ void AShooterCharacter::SelectButtonPressed()
 	{
 		TraceHitItem->StartItemCurve(this);
 
-		if (TraceHitItem->GetPickupSound())
-		{
-			UGameplayStatics::PlaySound2D(this, TraceHitItem->GetPickupSound());
-		}
+		TraceHitItem = nullptr;
+
+		//if (TraceHitItem->GetPickupSound())
+		//{
+		//	UGameplayStatics::PlaySound2D(this, TraceHitItem->GetPickupSound());
+		//}
 	}
 }
 
@@ -751,6 +759,7 @@ void AShooterCharacter::SwapWeapon(AWeapon* WeaponToSwap)
 	if (Inventory.Num() - 1 >= EquippedWeapon->GetSlotIndex())
 	{
 		Inventory[EquippedWeapon->GetSlotIndex()] = WeaponToSwap;
+		WeaponToSwap->SetSlotIndex(EquippedWeapon->GetSlotIndex());
 	}
 
 	DropWeapon();
