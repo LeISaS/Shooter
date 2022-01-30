@@ -148,6 +148,15 @@ protected:
 
 	void InitializeInterpLocations();
 
+	//Inventory Key Pressed
+	void FKeyPressed();
+	void OneKeyPressed();
+	void TwoKeyPressed();
+	void ThreeKeypressed();
+	void FourKeyPressed();
+	void FiveKeyPressed();
+
+	void ExchangeInventoryItems(int32 CurrentitemIndex, int32 NewItemIndex);
 
 public:	
 	// Called every frame
