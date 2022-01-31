@@ -54,10 +54,10 @@ protected:
 
 	/**Called when overlapping AreaSphere*/
 	UFUNCTION()
-	void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+		void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	/**Called When end Overlapping AreaSphere*/
 	UFUNCTION()
-	void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+		void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	/**Set the ActiveStarts array of bools based on rarity*/
 	void SetActiveStarts();
@@ -73,7 +73,7 @@ protected:
 
 	FVector GetInterpLocation();
 
-	void PlayPickupSound();
+	void PlayPickupSound(bool bForcePlaySound = false);
 
 
 	virtual void InitializeCustomDepth();
@@ -81,72 +81,72 @@ protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	void UpdatePulse();
-	 
+
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	//Called in AShooterCharacter::GetPickupItem
-	void PlayEquipSound();
+	void PlayEquipSound(bool bForcePlaySound = false);
 private:
 	/**Skeletal Mesh for the item*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	USkeletalMeshComponent* ItemMesh;
+		USkeletalMeshComponent* ItemMesh;
 
 	/** Line trace collides with box to show HUD widgets*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* CollisionBox;
+		class UBoxComponent* CollisionBox;
 
 	/** Popup Widget for when the player looks at the item */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	class UWidgetComponent* PickupWidget;
+		class UWidgetComponent* PickupWidget;
 
-	/** Enables item tracing when overlapped */ 
+	/** Enables item tracing when overlapped */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	class USphereComponent* AreaSphere;
+		class USphereComponent* AreaSphere;
 
 	/**The name which appears on the Pickup Widget*/
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	FString ItemName;
+		FString ItemName;
 
 	/**Item count (ammo, etc.) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	int32 ItemCount;
+		int32 ItemCount;
 
 	/**Item rarity = determines numbers of start in pickup widget*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	EItemRarity ItemRarity;
+		EItemRarity ItemRarity;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	TArray<bool> ActiveStarts;
-	
+		TArray<bool> ActiveStarts;
+
 	/**State of the Item*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	EItemState ItemState;
+		EItemState ItemState;
 
 	/**The Curve asset to use for the item's Z location when interping */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	class UCurveFloat* ItemZCurve;
+		class UCurveFloat* ItemZCurve;
 
 	/**Starting location when interping begins*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	FVector ItemInterpStartLocation;
+		FVector ItemInterpStartLocation;
 
 	/** Target interp location in front of the camera*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	FVector CameraTargetLocation;
+		FVector CameraTargetLocation;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	bool bInterping;
+		bool bInterping;
 
 	FTimerHandle ItemInterpTimer;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	class AShooterCharacter* Character;
+		class AShooterCharacter* Character;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	float ZCurveTime;
+		float ZCurveTime;
 
 	/** X Y Item while interping*/
 	float ItemInterpX;
@@ -157,66 +157,66 @@ private:
 
 	/** Curve used to scale the item when interping*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	UCurveFloat* ItemScaleCurve;
+		UCurveFloat* ItemScaleCurve;
 
 	/** Sound played when item is picked up*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	class USoundCue* PickupSound;
+		class USoundCue* PickupSound;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	USoundCue* EquipSound;
+		USoundCue* EquipSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	EItemType ItemType;
+		EItemType ItemType;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	int32 InterpLocIndex;
+		int32 InterpLocIndex;
 
 	/** Index for the material we 'd like change at runtime */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	int32 MaterialIndex;
+		int32 MaterialIndex;
 
 	/**Dynamic Instacne that we can change at runtime*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	UMaterialInstanceDynamic* DynamicMaterialInstance;
+		UMaterialInstanceDynamic* DynamicMaterialInstance;
 
 	/**Materia Instance used with the dynamic material Instance*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	UMaterialInstance* MaterialInstance;
+		UMaterialInstance* MaterialInstance;
 
 	bool bCanChangeCustomDepth;
 
 	/**Curve to drive the dynamic material parameters*/
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	class UCurveVector* PulseCurve;
+		class UCurveVector* PulseCurve;
 
 	FTimerHandle PulseTimer;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	float PulseCurveTime;
+		float PulseCurveTime;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	float GlowAmount;
+		float GlowAmount;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	float FresnelExponent;
+		float FresnelExponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	float FresnelReflectFraction;
+		float FresnelReflectFraction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
-	UCurveVector* InterpPulseCurve;
+		UCurveVector* InterpPulseCurve;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* IconBackground;
+		UTexture2D* IconBackground;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* IconItem;
+		UTexture2D* IconItem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* AmmoIcon;
+		UTexture2D* AmmoIcon;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	int32 SlotIndex;
+		int32 SlotIndex;
 
 public:
 
@@ -233,9 +233,10 @@ public:
 	FORCEINLINE int32 GetItemCount() const { return ItemCount; }
 	FORCEINLINE int32 GetSlotIndex() const { return SlotIndex; }
 	FORCEINLINE void SetSlotIndex(int32 Index) { SlotIndex = Index; }
+	FORCEINLINE void SetCharacter(AShooterCharacter* Char) { Character = Char; }
 
 	/**Called from the AShooterCharacter class */
-	void StartItemCurve(AShooterCharacter* Char);
+	void StartItemCurve(AShooterCharacter* Char, bool bForcePlaySound = false);
 
 	virtual void EnableCustomDepth();
 	virtual void DisableCustomDepth();

@@ -149,6 +149,7 @@ void AShooterCharacter::BeginPlay()
 
 	EquippedWeapon->DisableCustomDepth();
 	EquippedWeapon->DisableGlowMaterial();
+	EquippedWeapon->SetCharacter(this);
 
 	InitializeAmmoMap();
 	GetCharacterMovement()->MaxWalkSpeed = BaseMovementSpeed;
@@ -741,7 +742,7 @@ void AShooterCharacter::SelectButtonPressed()
 
 	if (TraceHitItem)
 	{
-		TraceHitItem->StartItemCurve(this);
+		TraceHitItem->StartItemCurve(this, true);
 
 		TraceHitItem = nullptr;
 	}
@@ -1109,6 +1110,7 @@ void AShooterCharacter::ExchangeInventoryItems(int32 CurrentitemIndex, int32 New
 		AnimInstance->Montage_Play(EquipMontage, 1.0f);
 		AnimInstance->Montage_JumpToSection(FName("Equip"));
 	}
+	NewWeapon->PlayEquipSound(true);
 }
 
 void AShooterCharacter::FinishEquipping()
