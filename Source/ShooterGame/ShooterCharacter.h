@@ -31,6 +31,7 @@ struct FInterpLocation
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEquipItemDeletage, int32, CurrentSlotIndex, int32, NewSlotIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FHighlightIconDelegate, int32, SlotIndex, bool, bStartAnimation);
 
 UCLASS()
 class SHOOTERGAME_API AShooterCharacter : public ACharacter
@@ -159,8 +160,10 @@ protected:
 
 	void ExchangeInventoryItems(int32 CurrentitemIndex, int32 NewItemIndex);
 
+	UFUNCTION(BlueprintCallable)
 	void FinishEquipping();
 
+	int32 GetEmptyInventorySlot();
 
 public:	
 	// Called every frame
@@ -435,6 +438,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* EquipMontage;
 
+	UPROPERTY(BlueprintAssignable,Category = Delegates, meta = (AllowPrivateAccess = "true"))
+	FHighlightIconDelegate HighlightIconDelegate;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
+	int32 HighlightedSlot;
 
 public:
 	
@@ -470,4 +478,8 @@ public:
 
 	void StartPickupSoundTimer();
 	void StartEquipSoundTimer();
+
+	void HighlightInventorySlot();
+
+	void UnHighlightInventorySlot();
 };
