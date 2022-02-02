@@ -239,18 +239,18 @@ private:
 		UTexture2D* AmmoIcon;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	int32 SlotIndex;
+		int32 SlotIndex;
 
 	/** True when the Character's inventory is full*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Inventory, meta = (AllowPrivateAccess = "true"))
-	bool bCharacterInventoryFull;
+		bool bCharacterInventoryFull;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = DataTable, meta = (AllowPrivateAccess = "true"))
-	class UDataTable* ItemRarityDataTable;
+		class UDataTable* ItemRarityDataTable;
 
 	//Mateirals
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rarity, meta = (AllowPrivateAccess = "true"))
-	FLinearColor GlowColor;
+		FLinearColor GlowColor;
 
 	//Pickup Widget
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rarity, meta = (AllowPrivateAccess = "true"))
@@ -262,10 +262,10 @@ private:
 
 	//Number of stars in the pickup widget
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rarity, meta = (AllowPrivateAccess = "true"))
-	int32 NumberOfStars;
+		int32 NumberOfStars;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rarity, meta = (AllowPrivateAccess = "true"))
-	UTexture2D* IconBackground;
+		UTexture2D* IconBackground;
 
 
 public:
@@ -286,7 +286,7 @@ public:
 	FORCEINLINE void SetSlotIndex(int32 Index) { SlotIndex = Index; }
 	FORCEINLINE void SetCharacter(AShooterCharacter* Char) { Character = Char; }
 	FORCEINLINE void SetCharacterInventoryFull(bool bFull) { bCharacterInventoryFull = bFull; }
-	
+
 	FORCEINLINE void SetPickupSound(USoundCue* Sound) { PickupSound = Sound; }
 	FORCEINLINE void SetEquipSound(USoundCue* Sound) { EquipSound = Sound; }
 
@@ -294,6 +294,16 @@ public:
 	//Set Item icon for the inventory
 	FORCEINLINE void SetIconItem(UTexture2D* Icon) { IconItem = Icon; }
 	FORCEINLINE void SetAmmoIcon(UTexture2D* Icon) { AmmoIcon = Icon; }
+
+	FORCEINLINE void SetMaterialInstance(UMaterialInstance* Instance) { MaterialInstance = Instance; }
+	FORCEINLINE UMaterialInstance* GetMaterialInstance() const { return MaterialInstance; }
+
+	FORCEINLINE void SetDynamicMaterialInstance(UMaterialInstanceDynamic* Instance) { DynamicMaterialInstance = Instance; }
+	FORCEINLINE UMaterialInstanceDynamic* GetDynamicMaterialInstance() const { return DynamicMaterialInstance; }
+
+	FORCEINLINE FLinearColor GetGlowColor() const { return GlowColor; }
+	FORCEINLINE int32 GetMaterialIndex() const { return MaterialIndex; }
+	FORCEINLINE void SetMaterialIndex(int32 Index) { MaterialIndex = Index; }
 
 	/**Called from the AShooterCharacter class */
 	void StartItemCurve(AShooterCharacter* Char, bool bForcePlaySound = false);
