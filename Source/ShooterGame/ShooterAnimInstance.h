@@ -124,4 +124,8 @@ private:
 	/** Weapon Tpye for the currently equipped weapon*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Crouching, meta = (AllowPrivateAccess = "true"))
 	EWeaponType EquippedWeaponType;
+
+	// True When not reloading or equippemg
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Crouching, meta = (AllowPrivateAccess = "true"))
+	bool bShoudUseFABRIK;
 };
