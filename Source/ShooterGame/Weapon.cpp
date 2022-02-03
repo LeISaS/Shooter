@@ -15,7 +15,8 @@ AWeapon::AWeapon() :
 	SlideDisplacement(0.f),
 	SlideDisplacemnetTime(0.2f),
 	MaxSlideDisplacement(0.4f),
-	bMovingSlide(false)
+	bMovingSlide(false),
+	bAutomatic(true)
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -73,6 +74,7 @@ void AWeapon::OnConstruction(const FTransform& Transform)
 			MuzzleFlash = WeaponDataRow->MuzzleFlash;
 			FireSound = WeaponDataRow->FireSound;
 			BoneToHide = WeaponDataRow->BoneToHide;
+			bAutomatic = WeaponDataRow->bAutomatic;
 		}
 		if (GetMaterialInstance())
 		{
