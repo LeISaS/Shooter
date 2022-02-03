@@ -55,6 +55,21 @@ struct FWeaponDataTable : public FTableRowBase
 
 		UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		TSubclassOf<UAnimInstance> AnimBP;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTexture2D* CrosshairsMiddle;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite)
+			UTexture2D* CrossHairLeft;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite)
+			UTexture2D* CrosshairsRight;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite)
+			UTexture2D* CrosshairsBottom;
+
+		UPROPERTY(EditAnywhere, BlueprintReadWrite)
+			UTexture2D* CrosshairsTop;
 };
 
 /**
@@ -108,8 +123,22 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = DataTable, meta = (AllowPrivateAccess = "true"))
 	UDataTable* WeaponDataTable;
 
-
 	int32 PreviousMaterialIndex;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* CrosshairsMiddle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* CrossHairLeft;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* CrosshairsRight;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* CrosshairsBottom;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = DataTable, meta = (AllowPrivateAccess = "true"))
+	UTexture2D* CrosshairsTop;
 public:
 	void ThrowWeapon();
 	FORCEINLINE int32 GetAmmo() const { return Ammo; }
