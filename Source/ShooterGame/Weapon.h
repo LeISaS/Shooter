@@ -102,6 +102,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	void FinishMovingSlide();
+	void UpdateSlideDisplacement();
+
 private:
 	FTimerHandle ThrowWeaponTimer;
 	float ThrowWeaponTime;
@@ -166,9 +169,27 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = DataTable, meta = (AllowPrivateAccess = "true"))
 	USoundCue* FireSound;
 
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = DataTable, meta = (AllowPrivateAccess = "true"))
 	FName BoneToHide;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	float SlideDisplacement;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* SlideDisplacementCurve;
+
+	/**Timer Handle for udpating SlideDisplacemnet*/
+	FTimerHandle SlideTimer;
+
+	/**Time for displacing the slide during pistol fire*/
+	float SlideDisplacemnetTime;
+
+	/** Ture when moving the pistol slide*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	bool bMovingSlide;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
+	float MaxSlideDisplacement;
 
 public:
 	void ThrowWeapon();
@@ -196,4 +217,6 @@ public:
 	FORCEINLINE USoundCue* GetFireSound() const { return FireSound; }
 
 	bool ClipIsFull();
+
+	void StartSlideTimer();
 };

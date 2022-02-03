@@ -11,7 +11,11 @@ AWeapon::AWeapon() :
 	WeaponType(EWeaponType::EWT_SubmachineGun),
 	AmmoType(EAmmoType::EAT_9mm),
 	ReloadMontageSection(FName(TEXT("Reload SMG"))),
-	ClipBoneName(TEXT("smg_clip"))
+	ClipBoneName(TEXT("smg_clip")),
+	SlideDisplacement(0.f),
+	SlideDisplacemnetTime(0.1f),
+	MaxSlideDisplacement(0.4f),
+	bMovingSlide(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -89,6 +93,21 @@ void AWeapon::BeginPlay()
 	}
 }
 
+void AWeapon::FinishMovingSlide()
+{
+	bMovingSlide = false;
+}
+
+void AWeapon::UpdateSlideDisplacement()
+{
+	if (SlideDisplacementCurve && bMovingSlide)
+	{
+		const float ElapsedTime = GetWorldTimerManager().GetTimerElapsed(SlideTimer);
+		const float CurveValue = SlideDisplacementCurve->GetFloatValue(ElapsedTime);
+		SlideDisplacement = CurveValue * MaxSlideDisplacement;
+	}
+}
+
 void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -99,6 +118,7 @@ void AWeapon::Tick(float DeltaTime)
 		const FRotator MeshRotation{ 0.f,GetItemMesh()->GetComponentRotation().Yaw,0.f };
 		GetItemMesh()->SetWorldRotation(MeshRotation, false, nullptr, ETeleportType::TeleportPhysics);
 	}
+	UpdateSlideDisplacement();
 }
 void AWeapon::ThrowWeapon()
 {
@@ -150,4 +170,10 @@ void AWeapon::ReloadAmmo(int32 Amount)
 bool AWeapon::ClipIsFull()
 {
 	return Ammo >= MagazineCapacity;;
+}
+
+void AWeapon::StartSlideTimer()
+{
+	bMovingSlide = true;
+	GetWorldTimerManager().SetTimer(SlideTimer, this, &AWeapon::FinishMovingSlide, SlideDisplacemnetTime);
 }
