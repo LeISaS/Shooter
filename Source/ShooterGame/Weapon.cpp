@@ -13,7 +13,7 @@ AWeapon::AWeapon() :
 	ReloadMontageSection(FName(TEXT("Reload SMG"))),
 	ClipBoneName(TEXT("smg_clip")),
 	SlideDisplacement(0.f),
-	SlideDisplacemnetTime(0.1f),
+	SlideDisplacemnetTime(0.2f),
 	MaxSlideDisplacement(0.4f),
 	bMovingSlide(false)
 {

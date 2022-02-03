@@ -182,6 +182,8 @@ private:
 	FTimerHandle SlideTimer;
 
 	/**Time for displacing the slide during pistol fire*/
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pistol, meta = (AllowPrivateAccess = "true"))
 	float SlideDisplacemnetTime;
 
 	/** Ture when moving the pistol slide*/
