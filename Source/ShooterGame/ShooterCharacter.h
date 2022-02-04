@@ -165,6 +165,9 @@ protected:
 
 	int32 GetEmptyInventorySlot();
 
+	UFUNCTION(BlueprintCallable)
+	EPhysicalSurface GetSurfaceType();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
