@@ -33,6 +33,7 @@ void AEnemy::BeginPlay()
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	UpdateHitNumbers();
 
 }
 
@@ -120,4 +121,16 @@ void AEnemy::DestroyHitNumber(UUserWidget* HitNumber)
 {
 	HitNumbers.Remove(HitNumber);
 	HitNumber->RemoveFromParent();
+}
+
+void AEnemy::UpdateHitNumbers()
+{
+	for (auto& HitPair : HitNumbers)
+	{
+		UUserWidget* HitNumber = HitPair.Key;
+		const FVector Location = HitPair.Value;
+		FVector2D ScreenPosition;
+		UGameplayStatics::ProjectWorldToScreen(GetWorld()->GetFirstPlayerController(), Location, ScreenPosition);
+		HitNumber->SetPositionInViewport(ScreenPosition);
+	}
 }
