@@ -899,17 +899,22 @@ void AShooterCharacter::SendBullet()
 
 				if (HitEnemy)
 				{
+					int32 Damage{};
 					if (BeamHitResult.BoneName.ToString() == HitEnemy->GetHeadBone())
 					{
 						///Head Shot
 						UGameplayStatics::ApplyDamage(BeamHitResult.Actor.Get(), EquippedWeapon->GetHeadShotDamage(), GetController(), this, UDamageType::StaticClass());
+						Damage = EquippedWeapon->GetHeadShotDamage();
 					}
 					else
 					{
 						//Body Shot
 						UGameplayStatics::ApplyDamage(BeamHitResult.Actor.Get(), EquippedWeapon->GetDamage(), GetController(), this, UDamageType::StaticClass());
+						Damage = EquippedWeapon->GetDamage();
 					}
-					UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *BeamHitResult.BoneName.ToString());
+					//UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *BeamHitResult.BoneName.ToString());
+
+					HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location);
 				}
 
 				//spawn default Particles
