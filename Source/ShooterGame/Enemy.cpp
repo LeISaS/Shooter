@@ -56,6 +56,7 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	if (Health - DamageAmount <= 0.f)
 	{
 		Health = 0.f;
+		Die();
 	}
 	else
 	{
@@ -69,4 +70,9 @@ void AEnemy::ShowHealthBar_Implementation()
 	GetWorldTimerManager().ClearTimer(HealthBarTimer);
 	GetWorldTimerManager().SetTimer(HealthBarTimer,this,&AEnemy::HideHealthBar,HealthBarDisplayTime);
 
+}
+
+void AEnemy::Die()
+{
+	HideHealthBar();
 }
