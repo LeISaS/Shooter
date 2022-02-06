@@ -31,6 +31,7 @@ protected:
 
 	void PlayHitMontage(FName Section, float PlayRate = 1.0f );
 
+	void ResetHitReactTimer();
 private :
 
 	/**Particles to spawn when hit by bullets;*/
@@ -63,6 +64,15 @@ private :
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = true))
 	UAnimMontage* HitMontage;
 
+	FTimerHandle HitReactTimer;
+
+	bool bCanHitReact;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = true))
+	float HitReactTimerMin;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = true))
+	float HitReactTimerMax;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
