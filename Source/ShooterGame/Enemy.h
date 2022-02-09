@@ -41,6 +41,10 @@ protected:
 
 	void UpdateHitNumbers();
 
+	/**Called when something overlaps with the agro sphere*/
+	UFUNCTION()
+	void AgroSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 private :
 
 	/**Particles to spawn when hit by bullets;*/
@@ -104,6 +108,10 @@ private :
 	FVector PatrolPoint2;
 
 	class AEnemyController* EnemyController;
+
+	/**Overlap sphere for when the enemy becomes hostile*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowprivateAccess = "true"))
+	class USphereComponent* AgrosSphere;
 
 public:	
 	// Called every frame
