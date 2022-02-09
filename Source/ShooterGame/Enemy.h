@@ -45,6 +45,9 @@ protected:
 	UFUNCTION()
 	void AgroSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION(BlueprintCallable)
+	void SetStunned(bool Stunned);
+
 private :
 
 	/**Particles to spawn when hit by bullets;*/
@@ -113,6 +116,13 @@ private :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowprivateAccess = "true"))
 	class USphereComponent* AgrosSphere;
 
+	/**True when playing the get hit animation*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite,Category = Combat, meta = (AllowprivateAccess = "true"))
+	bool bStunned;
+	
+	/**Chance of being stunned 0 : no Stun, 1: 100% stun*/
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Combat, meta = (AllowprivateAccess = "true"))
+	float StunChange;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
