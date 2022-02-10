@@ -48,6 +48,18 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SetStunned(bool Stunned);
 
+	UFUNCTION()
+	void CombatRangeOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void CombatRangeEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable)
+	void PlayAttackMontage(FName Section, float PlayRate);
+
+	//블루프린트 노드로 입력 실행핀이 실제로 필요하지 않음
+	UFUNCTION(BlueprintPure)
+	FName GetAttackSectionName();
 private :
 
 	/**Particles to spawn when hit by bullets;*/
@@ -123,6 +135,25 @@ private :
 	/**Chance of being stunned 0 : no Stun, 1: 100% stun*/
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Combat, meta = (AllowprivateAccess = "true"))
 	float StunChange;
+
+	/** True when in attack range; time to attack! */
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Combat, meta = (AllowprivateAccess = "true"))
+	bool bInAttackRange;
+
+	/**Sphere attack in range*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowprivateAccess = "true"))
+	USphereComponent* CombatRangeSphere;
+
+	//Montage containing different attacks
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = true))
+	UAnimMontage* AttackMontage;
+
+	/**four attack montage section names*/
+	FName AttackLFast;
+	FName AttackRFast;
+	FName AttackL;
+	FName AttackR;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
