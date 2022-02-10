@@ -77,6 +77,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void DeactivateRightWeapon();
 
+	void DoDamage(AActor* Victim);
+
 private :
 	/**Particles to spawn when hit by bullets;*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
@@ -177,6 +179,9 @@ private :
 	/**Collision volume for the Right weapon*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* RightWeaponCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess= "true"))
+	float BaseDamage;
 
 public:	
 	// Called every frame
