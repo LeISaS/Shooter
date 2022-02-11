@@ -81,7 +81,8 @@ AShooterCharacter::AShooterCharacter() :
 	EquipSoundResetTime(0.2f),
 	HighlightedSlot(-1),
 	Health(100.f),
-	MaxHealth(100.f)
+	MaxHealth(100.f),
+	StunChance(0.25f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -371,6 +372,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AShooterCharacter::FinishReloading()
 {
+	if (CombatState == ECombatState::ECS_Stunned)return;
+
 	//update the Combat State
 	CombatState = ECombatState::ECS_Unoccupied;
 
@@ -488,7 +491,9 @@ bool AShooterCharacter::GetBeamEndLocation(const FVector& MuzzleSocketLocation, 
 void AShooterCharacter::AimingButtonPressed()
 {
 	bAimingButtonpressed = true;
-	if (CombatState != ECombatState::ECS_Reloading&& CombatState!=ECombatState::ECS_Equipping)
+	if (CombatState != ECombatState::ECS_Reloading&&
+		CombatState!=ECombatState::ECS_Equipping &&
+		CombatState!=ECombatState::ECS_Stunned)
 	{
 		Aim();
 	}
@@ -610,6 +615,8 @@ void AShooterCharacter::StartFireTimer()
 
 void AShooterCharacter::AutoFireReset()
 {
+	if (CombatState == ECombatState::ECS_Stunned) return;
+
 	CombatState = ECombatState::ECS_Unoccupied;
 	if (EquippedWeapon == nullptr) return;
 
@@ -1219,6 +1226,7 @@ void AShooterCharacter::ExchangeInventoryItems(int32 CurrentitemIndex, int32 New
 
 void AShooterCharacter::FinishEquipping()
 {
+	if (CombatState == ECombatState::ECS_Stunned) return;
 	CombatState = ECombatState::ECS_Unoccupied;
 	if (bAimingButtonpressed)
 	{
@@ -1257,6 +1265,8 @@ void AShooterCharacter::UnHighlightInventorySlot()
 	HighlightedSlot = -1;
 }
 
+
+
 EPhysicalSurface AShooterCharacter::GetSurfaceType()
 {
 	FHitResult HitResult;
@@ -1269,4 +1279,24 @@ EPhysicalSurface AShooterCharacter::GetSurfaceType()
 	
 	return UPhysicalMaterial::DetermineSurfaceType(HitResult.PhysMaterial.Get());
 
+}
+
+void AShooterCharacter::EndStun()
+{
+	CombatState = ECombatState::ECS_Unoccupied;
+
+	if (bAimingButtonpressed)
+	{
+		Aim();
+	}
+}
+void AShooterCharacter::Stun()
+{
+	CombatState = ECombatState::ECS_Stunned;
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (AnimInstance&&HitReactMontage)
+	{
+		AnimInstance->Montage_Play(HitReactMontage);
+	}
 }

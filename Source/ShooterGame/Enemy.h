@@ -80,6 +80,9 @@ protected:
 	void DoDamage(class AShooterCharacter* Victim);
 	void SpawnBlood(AShooterCharacter* Victim, FName SocketName);
 
+	// Attempt to stun character
+	void StunCharacter(AShooterCharacter* Victim);
+
 private :
 	/**Particles to spawn when hit by bullets;*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))

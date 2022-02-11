@@ -129,3 +129,4 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Crouching, meta = (AllowPrivateAccess = "true"))
 	bool bShoudUseFABRIK;
 };
+
