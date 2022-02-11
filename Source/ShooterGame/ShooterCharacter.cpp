@@ -21,7 +21,8 @@
 #include "ShooterGame.h"
 #include "BulletHitInterface.h"
 #include "Enemy.h"
-
+#include "EnemyController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 // Sets default values
 AShooterCharacter::AShooterCharacter() :
 	// Base rate for turning/looking up
@@ -144,6 +145,12 @@ float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	{
 		Health = 0.f;
 		Die();
+
+		auto EnemyController = Cast<AEnemyController>(EventInstigator);
+		if (EnemyController)
+		{
+			EnemyController->GetBlackBoardComponent()->SetValueAsBool(FName(TEXT("CharacterDead")), true);
+		}
 	}
 	else
 	{
