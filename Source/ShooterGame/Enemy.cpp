@@ -35,7 +35,8 @@ AEnemy::AEnemy() :
 	LeftWeaponSocket(TEXT("FX_Trail_L_02")),
 	RightWeaponSocket(TEXT("FX_Trail_R_02")),
 	bCanAttack(true),
-	AttackWaitTime(1.f)
+	AttackWaitTime(1.f),
+	bDying(false)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -153,6 +154,13 @@ void AEnemy::BulletHit_Implementation(FHitResult HitResult)
 
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	
+	//Set the Target Blackboard key to agro the character
+	if (EnemyController)
+	{
+		EnemyController->GetBlackBoardComponent()->SetValueAsObject(FName("Target"), DamageCauser);
+	}
+
 	if (Health - DamageAmount <= 0.f)
 	{
 		Health = 0.f;
@@ -174,7 +182,21 @@ void AEnemy::ShowHealthBar_Implementation()
 
 void AEnemy::Die()
 {
+	if (bDying) return;
+	bDying = true;
 	HideHealthBar();
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (AnimInstance && DeathMontage)
+	{
+		AnimInstance->Montage_Play(DeathMontage);
+	}
+	if (EnemyController)
+	{
+		EnemyController->GetBlackBoardComponent()->SetValueAsBool(FName("Dead"), true);
+		EnemyController->StopMovement();
+	}
 }
 
 void AEnemy::PlayHitMontage(FName Section, float PlayRate)
@@ -406,4 +428,9 @@ void AEnemy::ResetCanAttack()
 	{
 		EnemyController->GetBlackBoardComponent()->SetValueAsBool(FName("CanAttack"), true);
 	}
+}
+
+void AEnemy::FinishDeath()
+{
+	Destroy();
 }
