@@ -16,6 +16,7 @@
 #include "Components/BoxComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 
+
 // Sets default values
 AEnemy::AEnemy() :
 	Health(100.f),
@@ -131,7 +132,7 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AEnemy::BulletHit_Implementation(FHitResult HitResult)
+void AEnemy::BulletHit_Implementation(FHitResult HitResult, AActor* Shooter, AController* ShooterController)
 {
 	if (ImpactSound)
 	{
@@ -140,19 +141,6 @@ void AEnemy::BulletHit_Implementation(FHitResult HitResult)
 	if (ImpactParticles)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, HitResult.Location, FRotator(0.f), true);
-	}
-
-	if (bDying)return;
-
-	ShowHealthBar();
-
-	//Determine wheteher bullet hit stuns
-	const float Stunned = FMath::FRandRange(0.1f, 1.0f);
-	if (Stunned <= StunChange)
-	{
-		//Stun the Enemy
-		PlayHitMontage(FName("HitReactFront"));
-		SetStunned(true);
 	}
 }
 
@@ -174,6 +162,20 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	{
 		Health -= DamageAmount;
 	}
+
+	if (bDying)return DamageAmount;
+
+	ShowHealthBar();
+
+	//Determine wheteher bullet hit stuns
+	const float Stunned = FMath::FRandRange(0.1f, 1.0f);
+	if (Stunned <= StunChange)
+	{
+		//Stun the Enemy
+		PlayHitMontage(FName("HitReactFront"));
+		SetStunned(true);
+	}
+
 	return DamageAmount;
 }
 
@@ -262,8 +264,13 @@ void AEnemy::AgroSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	
 	if (Character)
 	{
-		//Set the Target
-		EnemyController->GetBlackBoardComponent()->SetValueAsObject(TEXT("Target"), Character);
+		if (EnemyController)
+		{
+			if (EnemyController->GetBlackBoardComponent())
+			{
+				EnemyController->GetBlackBoardComponent()->SetValueAsObject(TEXT("Target"), Character);
+			}
+		}
 	}
 }
 
