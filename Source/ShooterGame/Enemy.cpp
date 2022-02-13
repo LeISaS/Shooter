@@ -38,7 +38,10 @@ AEnemy::AEnemy() :
 	bCanAttack(true),
 	AttackWaitTime(1.f),
 	bDying(false),
-	DeathTime(4.f)
+	DeathTime(4.f),
+	bWeakness(false),
+	WeaknessCount(0),
+	ChangeWeakness(3.f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -164,6 +167,19 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	}
 
 	if (bDying)return DamageAmount;
+
+	if (WeaknessCount == 3)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("WeaknessBone Name : %s"), *WeaknessBoneName().ToString());
+		bWeakness = true;
+		GetWorldTimerManager().SetTimer(ChangeWeaknessHandle, this, &AEnemy::WeaknessChange, ChangeWeakness);
+		
+	}
+	else
+	{
+		WeaknessCount++;
+		bWeakness = false;
+	}
 
 	ShowHealthBar();
 
@@ -451,4 +467,20 @@ void AEnemy::FinishDeath()
 void AEnemy::DestroyEnemy()
 {
 	Destroy();
+}
+
+FName AEnemy::WeaknessBoneName()
+{
+	WeaknessBoneNames.Add(FName(TEXT("Head")));
+	WeaknessBoneNames.Add(FName(TEXT("Weapon_l")));
+	WeaknessBoneNames.Add(FName(TEXT("Weapon_r")));
+
+	int32 MyBoneNumber = FMath::RandRange(0, 2);
+	return WeaknessBoneNames[MyBoneNumber];
+}
+
+void AEnemy::WeaknessChange()
+{
+	WeaknessCount = 0;
+	bWeakness = false;
 }

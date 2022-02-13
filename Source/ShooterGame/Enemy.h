@@ -90,6 +90,11 @@ protected:
 
 	UFUNCTION()
 	void DestroyEnemy();
+
+	/**WeaknessSystem*/
+	FName WeaknessBoneName();
+
+	void WeaknessChange();
 private :
 	/**Particles to spawn when hit by bullets;*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
@@ -221,6 +226,19 @@ private :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	float DeathTime;
 
+	/**WeaknessSystem*/
+	TArray<FName> WeaknessBoneNames;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weakness", meta = (AllowPrivateAccess = "true"))
+	bool bWeakness;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weakness", meta = (AllowPrivateAccess = "true"))
+	int32 WeaknessCount;
+	
+	FTimerHandle ChangeWeaknessHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weakness", meta = (AllowPrivateAccess = "true"))
+	float ChangeWeakness;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
