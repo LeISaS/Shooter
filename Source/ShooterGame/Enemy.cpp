@@ -170,11 +170,11 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 
 	if (WeaknessCount == 3)
 	{
+		if (bWeakness) return DamageAmount;
+		bWeakness = true;
 		LastWeaknessName = WeaknessBoneName();
 		UE_LOG(LogTemp, Warning, TEXT("WeaknessBone Name : %s"), *LastWeaknessName);
-		bWeakness = true;
 		GetWorldTimerManager().SetTimer(ChangeWeaknessHandle, this, &AEnemy::WeaknessChange, ChangeWeakness);
-		
 	}
 	else
 	{
@@ -483,5 +483,6 @@ FString AEnemy::WeaknessBoneName()
 void AEnemy::WeaknessChange()
 {
 	WeaknessCount = 0;
+	LastWeaknessName = FString(TEXT(""));
 	bWeakness = false;
 }
