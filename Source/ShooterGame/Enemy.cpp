@@ -170,7 +170,8 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 
 	if (WeaknessCount == 3)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("WeaknessBone Name : %s"), *WeaknessBoneName().ToString());
+		LastWeaknessName = WeaknessBoneName();
+		UE_LOG(LogTemp, Warning, TEXT("WeaknessBone Name : %s"), *LastWeaknessName);
 		bWeakness = true;
 		GetWorldTimerManager().SetTimer(ChangeWeaknessHandle, this, &AEnemy::WeaknessChange, ChangeWeakness);
 		
@@ -469,11 +470,11 @@ void AEnemy::DestroyEnemy()
 	Destroy();
 }
 
-FName AEnemy::WeaknessBoneName()
+FString AEnemy::WeaknessBoneName()
 {
-	WeaknessBoneNames.Add(FName(TEXT("Head")));
-	WeaknessBoneNames.Add(FName(TEXT("Weapon_l")));
-	WeaknessBoneNames.Add(FName(TEXT("Weapon_r")));
+	WeaknessBoneNames.Add(FString(TEXT("Head")));
+	WeaknessBoneNames.Add(FString(TEXT("Weapon_l")));
+	WeaknessBoneNames.Add(FString(TEXT("Weapon_r")));
 
 	int32 MyBoneNumber = FMath::RandRange(0, 2);
 	return WeaknessBoneNames[MyBoneNumber];

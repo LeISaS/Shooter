@@ -92,7 +92,7 @@ protected:
 	void DestroyEnemy();
 
 	/**WeaknessSystem*/
-	FName WeaknessBoneName();
+	FString WeaknessBoneName();
 
 	void WeaknessChange();
 private :
@@ -227,7 +227,7 @@ private :
 	float DeathTime;
 
 	/**WeaknessSystem*/
-	TArray<FName> WeaknessBoneNames;
+	TArray<FString> WeaknessBoneNames;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weakness", meta = (AllowPrivateAccess = "true"))
 	bool bWeakness;
@@ -239,6 +239,9 @@ private :
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weakness", meta = (AllowPrivateAccess = "true"))
 	float ChangeWeakness;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weakness", meta = (AllowPrivateAccess = "true"))
+	FString LastWeaknessName;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -256,4 +259,6 @@ public:
 	void ShowHitNumber(int32 Damage, FVector HitLocation,bool bHeadShot);
 
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() const { return BehaviorTree; }
+	FORCEINLINE bool GetWeakness() const { return bWeakness; }
+	FORCEINLINE FString GetLastWeaknessName() const { return LastWeaknessName; }
 };

@@ -950,22 +950,46 @@ void AShooterCharacter::SendBullet()
 
 				if (HitEnemy)
 				{
+					//약점 false
 					int32 Damage{};
-					if (BeamHitResult.BoneName.ToString() == HitEnemy->GetHeadBone())
+					if (!HitEnemy->GetWeakness())
 					{
-						///Head Shot
-						UGameplayStatics::ApplyDamage(BeamHitResult.Actor.Get(), EquippedWeapon->GetHeadShotDamage(), GetController(), this, UDamageType::StaticClass());
-						Damage = EquippedWeapon->GetHeadShotDamage();
-						HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location,true);
+						if (BeamHitResult.BoneName.ToString() == HitEnemy->GetHeadBone())
+						{
+							///Head Shot
+							UGameplayStatics::ApplyDamage(BeamHitResult.Actor.Get(), EquippedWeapon->GetHeadShotDamage(), GetController(), this, UDamageType::StaticClass());
+							Damage = EquippedWeapon->GetHeadShotDamage();
+							HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, true);
+						}
+						else
+						{
+							//Body Shot
+							UGameplayStatics::ApplyDamage(BeamHitResult.Actor.Get(), EquippedWeapon->GetDamage(), GetController(), this, UDamageType::StaticClass());
+							Damage = EquippedWeapon->GetDamage();
+							HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, false);
+						}
 					}
+					//약점 True
 					else
 					{
-						//Body Shot
-						UGameplayStatics::ApplyDamage(BeamHitResult.Actor.Get(), EquippedWeapon->GetDamage(), GetController(), this, UDamageType::StaticClass());
-						Damage = EquippedWeapon->GetDamage();
-						HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location,false);
-					}
+						//Hit와 같은지?
+						if (BeamHitResult.BoneName.ToString() == HitEnemy->GetLastWeaknessName())
+						{
+							UE_LOG(LogTemp, Warning, TEXT("WeaknessHitSuccess!"));	
+							UGameplayStatics::ApplyDamage(BeamHitResult.Actor.Get(), EquippedWeapon->GetDamage()+100, GetController(), this, UDamageType::StaticClass());
+							Damage = EquippedWeapon->GetDamage()+100;
+							HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, false);
+						}
+						else
+						{
+							UGameplayStatics::ApplyDamage(BeamHitResult.Actor.Get(), EquippedWeapon->GetDamage(), GetController(), this, UDamageType::StaticClass());
+							Damage = EquippedWeapon->GetDamage();
+							HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, false);
+						}
 					//UE_LOG(LogTemp, Warning, TEXT("Hit Component: %s"), *BeamHitResult.BoneName.ToString());
+					}
+
+
 				}
 
 				//spawn default Particles
